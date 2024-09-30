@@ -19,7 +19,7 @@ Mini Messageboard est une application web simple qui permet aux utilisateurs de 
 
 1. Clonez ce dépôt :
    ```bash
-   git clone <URL-du-dépôt>
+   git clone https://github.com/gery-guedegbe/mini-messageboard.git
    ```
 2. Naviguez dans le dossier du projet :
    ```bash

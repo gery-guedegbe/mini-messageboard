@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text"><%= title %></h1>
+
+      <ul class="">
+        <% messages.forEach(function(message) { %>
+        <li>
+          <strong><%= message.user %></strong>: <%= message.text %> <br />
+          <small>Added on: <%= message.added.toLocaleString() %></small>
+        </li>
+        <% }) %>
+      </ul>
+      <a href="/new">New message</a>
+    </div>
+  </body>
+  <script>
+    // Fonction pour sauvegarder les messages dans le local storage
+    function saveMessages(messages) {
+      localStorage.setItem("messages", JSON.stringify(messages));
+    }
+
+    // Lors de la soumission du formulaire
+    document.querySelector("form").addEventListener("submit", function (event) {
+      event.preventDefault(); // Empêche le rechargement de la page
+
+      const user = document.querySelector("#user").value; // Obtenez l'utilisateur
+      const text = document.querySelector("#text").value; // Obtenez le texte
+
+      // Créez un message
+      const message = {
+        user: user,
+        text: text,
+        added: new Date(),
+      };
+
+      // Récupérez les messages existants du local storage
+      const existingMessages =
+        JSON.parse(localStorage.getItem("messages")) || [];
+
+      // Ajoutez le nouveau message à la liste existante
+      existingMessages.push(message);
+
+      // Sauvegardez les messages dans le local storage
+      saveMessages(existingMessages);
+
+      // Envoyez le message au serveur
+      fetch("/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
+      }).then((response) => {
+        if (response.ok) {
+          window.location.href = "/"; // Redirigez vers la page d'index
+        }
+      });
+    });
+  </script>
+</html>
